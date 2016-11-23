@@ -9,7 +9,13 @@ public class ResultVo {
 		this.code = code;
 		this.attachment = attachment;
 	}
+	public ResultVo(){
+		
+	}
 
+	public static ResultVo getInstance(int code, Object attachment){
+		return new ResultVo();
+	}
 	public int getCode() {
 		return code;
 	}
