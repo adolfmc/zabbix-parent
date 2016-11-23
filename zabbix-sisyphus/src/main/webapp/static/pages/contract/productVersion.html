@@ -1,0 +1,197 @@
+<!-- 产品版本页面 -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="keywords" content="jquery,ui,easy,easyui,web">
+    <meta name="description" content="easyui help you build your web page easily!">
+    <link rel="stylesheet" type="text/css" href="/fortune/static/jquery-easyui-1.3.5/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="/fortune/static/jquery-easyui-1.3.5/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="/fortune/static/jquery-easyui-1.3.5/demo/demo.css">
+    <script type="text/javascript" src="/fortune/static/jquery-easyui-1.3.5/jquery.min.js"></script>
+    <script type="text/javascript" src="/fortune/static/jquery-easyui-1.3.5/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/fortune/static/jquery-easyui-1.3.5/datagrid-detailview.js"></script>
+    <script>
+        function submitForm() {
+            $('#ff').form('submit');
+        }
+        function clearForm() {
+            $('#ff').form('clear');
+        }
+    </script>
+</head>
+<body>
+<form id="ff" style="padding: 20px;" method="post">
+    <input type="hidden" name="product.id" value="">
+    <table id="product_table" style="width:100%;">
+        <tr>
+            <td colspan="4"><h2>产品基本信息</h2></td>
+        </tr>
+        <tr>
+            <td width="20%">产品代码:</td>
+            <td width="30%"><input class="easyui-validatebox" type="text" name="product.code" data-options="required:true"/></td>
+            <td width="20%">产品名称:</td>
+            <td><input class="easyui-validatebox" type="text" name="product.proName" data-options="required:true"/></td>
+        </tr>
+        <tr>
+            <td>对应crmCODE:</td>
+            <td><input class="easyui-validatebox" type="text"  readonly="true"/></td>
+            <td>产品类型:</td>
+            <td>
+                <select class="easyui-combobox" name="product.baseProduct.id">
+                    <option value="1" selected="selected">非固定收益类</option>
+                    <option value="2">固定期限类</option>
+                    <option value="3">周期回收增值部分</option>
+                    <option value="4">周期回收回款部分</option>
+                    <option value="5">周期回收指定金额</option>
+                    <option value="6">零存整取类</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>备注:</td>
+            <td colspan="3"><textarea style="width: 100%;" class="easyui-validatebox"  name="product.memo"></textarea></td>
+        </tr>
+    </table>
+    <table id="product_version_table" style="width:100%;">
+        <tr>
+            <td colspan="4"><h2>版本信息</h2></td>
+        </tr>
+        <tr>
+            <td>版本号:</td>
+            <td><input class="easyui-validatebox" type="text" name="verName" data-options="required:true"/></td>
+        </tr>
+       <!-- <div>
+            <tr>
+                <td>预期期限内收益率:</td>
+                <td><input class="easyui-validatebox" type="text" name="" data-options="required:true"/></td>
+                <td>预期年化收益率:</td>
+                <td><input class="easyui-validatebox" type="text" name="" data-options="required:true"/></td>
+            </tr>
+        </div>-->
+        <tr>
+            <td>最小投资金额:</td>
+            <td><input class="easyui-validatebox" type="text" name="minAmt" data-options="required:true"/></td>
+            <td>最大投资金额:</td>
+            <td><input class="easyui-validatebox" type="text" name="maxAmt" data-options="required:true"/></td>
+        </tr>
+        <tr>
+            <td>产品计息类型:</td>
+            <td>
+                <select class="easyui-combobox" name="deadlineType">
+                    <option value="1" selected="selected">年</option>
+                    <option value="2">月</option>
+                </select>
+            </td>
+            <td>产品封闭期:</td>
+            <td><input class="easyui-validatebox" type="text" name="deadline" data-options="required:true"/></td>
+        </tr>
+        <tr>
+            <td>产品最大期数:</td>
+            <td><input class="easyui-validatebox" type="text" name="maxDeadline" data-options="required:true"/></td>
+            <td>资产计算原则:</td>
+            <td>
+                <select class="easyui-combobox" name="valueType">
+                    <option value="1" selected="selected">金额</option>
+                    <option value="2">PV</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>是否可以提前赎回:</td>
+            <td>
+                <select class="easyui-combobox" name="callable">
+                    <option value="1" selected="selected">是</option>
+                    <option value="2">否</option>
+                </select>
+            </td>
+            <td>提前赎回原则:</td>
+            <td>
+                <select class="easyui-combobox" name="callableType">
+                    <option value="1" selected="selected">金额</option>
+                    <option value="2">PV</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>是否自动划扣:</td>
+            <td>
+                <select class="easyui-combobox" name="autoDeduct">
+                    <option value="1" selected="selected">是</option>
+                    <option value="2">否</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>是否自动卖出:</td>
+            <td>
+                <select class="easyui-combobox" name="autoSell">
+                    <option value="1" selected="selected">是</option>
+                    <option value="2">否</option>
+                </select>
+            </td>
+            <td>是否导出首期债权债务转让单据:</td>
+            <td>
+                <select class="easyui-combobox"  name="exportNewOrder">
+                    <option value="1" selected="selected">是</option>
+                    <option value="2">否</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>是否导出非首期债权债务转让单据:</td>
+            <td>
+                <select class="easyui-combobox" name="exportOrder">
+                    <option value="1" selected="selected">是</option>
+                    <option value="2">否</option>
+                </select>
+            </td>
+            <td>是否导出期初收款确认单据:</td>
+            <td>
+                <select class="easyui-combobox" name="exportOrdreReceiveCfm">
+                    <option value="1" selected="selected">是</option>
+                    <option value="2">否</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>是否导出到期收款确认单据:</td>
+            <td>
+                <select class="easyui-combobox" name="exportSellReceiveCfm">
+                    <option value="1" selected="selected">是</option>
+                    <option value="2">否</option>
+                </select>
+            </td>
+            <td>是否导出账单:</td>
+            <td>
+                <select class="easyui-combobox" name="exportStatement">
+                    <option value="1" selected="selected">是</option>
+                    <option value="2">否</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>是否导出到期卖单:</td>
+            <td>
+                <select class="easyui-combobox" name="exportSell">
+                    <option value="1" selected="selected">是</option>
+                    <option value="2">否</option>
+                </select>
+            </td>
+            <td>是否风险基金补偿:</td>
+            <td>
+                <select class="easyui-combobox" name="useRiskReserve">
+                    <option value="1" selected="selected">是</option>
+                    <option value="2">否</option>
+                </select>
+            </td>
+        </tr>
+     <!--   <tr>
+            <td>卖出手续费:</td>
+            <td><input class="easyui-validatebox" type="text" name="" data-options="required:true"/></td>
+            <td>账户管理费 :</td>
+            <td><input class="easyui-validatebox" type="text" name="" data-options="required:true"/></td>
+        </tr>-->
+    </table>
+</form>
+</body>
+</html>
