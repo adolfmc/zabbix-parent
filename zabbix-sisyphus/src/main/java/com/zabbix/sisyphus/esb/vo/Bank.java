@@ -1,11 +1,11 @@
 package com.zabbix.sisyphus.esb.vo;
 
 public class Bank {
-	String name;
-	String cardId;
-	String bankNo;
-	String bankName;
-	String bankMobile;
+	private String name;
+	private String cardId;
+	private String bankNo;
+	private String bankName;
+	private String bankMobile;
 
 	public String getName() {
 		return name;

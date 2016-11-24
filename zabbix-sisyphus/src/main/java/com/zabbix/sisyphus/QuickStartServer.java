@@ -32,12 +32,12 @@ public class QuickStartServer {
 			System.out.println("[HINT] Hit Enter to reload the application quickly");
 
 			// 等待用户输入回车重载应用.
-			while (true) {
-				char c = (char) System.in.read();
-				if (c == '\n') {
-					JettyFactory.reloadContext(server);
-				}
-			}
+//			while (true) {
+//				char c = (char) System.in.read();
+//				if (c == '\n') {
+//					JettyFactory.reloadContext(server);
+//				}
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(-1);

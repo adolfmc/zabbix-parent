@@ -1,94 +1,95 @@
 package com.zabbix.sisyphus.esb.vo;
 
 public class AuthentInfo {
-	String customerInfoAuthent;
-	String cardAuthent;
-	String mobileAuthent;
-	String bankCardAuthent;
-	String weChatAuthent;
-	String alipayAuthent;
-	String JDAuthent;
-	String universityAuthent;
-	String QQAuthent;
-	String weiboAuthent;
+	private Boolean customerInfoAuthent;
+	private Boolean cardAuthent;
+	private Boolean mobileAuthent;
+	private Boolean bankCardAuthent;
+	private Boolean weChatAuthent;
+	private Boolean alipayAuthent;
+	private Boolean JDAuthent;
+	private Boolean universityAuthent;
+	private Boolean QQAuthent;
+	private Boolean weiboAuthent;
 
-	public String getCustomerInfoAuthent() {
+	public Boolean isCustomerInfoAuthent() {
 		return customerInfoAuthent;
 	}
 
-	public void setCustomerInfoAuthent(String customerInfoAuthent) {
+	public void setCustomerInfoAuthent(Boolean customerInfoAuthent) {
 		this.customerInfoAuthent = customerInfoAuthent;
 	}
 
-	public String getCardAuthent() {
+	public Boolean isCardAuthent() {
 		return cardAuthent;
 	}
 
-	public void setCardAuthent(String cardAuthent) {
+	public void setCardAuthent(Boolean cardAuthent) {
 		this.cardAuthent = cardAuthent;
 	}
 
-	public String getMobileAuthent() {
+	public Boolean isMobileAuthent() {
 		return mobileAuthent;
 	}
 
-	public void setMobileAuthent(String mobileAuthent) {
+	public void setMobileAuthent(Boolean mobileAuthent) {
 		this.mobileAuthent = mobileAuthent;
 	}
 
-	public String getBankCardAuthent() {
+	public Boolean isBankCardAuthent() {
 		return bankCardAuthent;
 	}
 
-	public void setBankCardAuthent(String bankCardAuthent) {
+	public void setBankCardAuthent(Boolean bankCardAuthent) {
 		this.bankCardAuthent = bankCardAuthent;
 	}
 
-	public String getWeChatAuthent() {
+	public Boolean isWeChatAuthent() {
 		return weChatAuthent;
 	}
 
-	public void setWeChatAuthent(String weChatAuthent) {
+	public void setWeChatAuthent(Boolean weChatAuthent) {
 		this.weChatAuthent = weChatAuthent;
 	}
 
-	public String getAlipayAuthent() {
+	public Boolean isAlipayAuthent() {
 		return alipayAuthent;
 	}
 
-	public void setAlipayAuthent(String alipayAuthent) {
+	public void setAlipayAuthent(Boolean alipayAuthent) {
 		this.alipayAuthent = alipayAuthent;
 	}
 
-	public String getJDAuthent() {
+	public Boolean isJDAuthent() {
 		return JDAuthent;
 	}
 
-	public void setJDAuthent(String jDAuthent) {
+	public void setJDAuthent(Boolean jDAuthent) {
 		JDAuthent = jDAuthent;
 	}
 
-	public String getUniversityAuthent() {
+	public Boolean isUniversityAuthent() {
 		return universityAuthent;
 	}
 
-	public void setUniversityAuthent(String universityAuthent) {
+	public void setUniversityAuthent(Boolean universityAuthent) {
 		this.universityAuthent = universityAuthent;
 	}
 
-	public String getQQAuthent() {
+	public Boolean isQQAuthent() {
 		return QQAuthent;
 	}
 
-	public void setQQAuthent(String qQAuthent) {
+	public void setQQAuthent(Boolean qQAuthent) {
 		QQAuthent = qQAuthent;
 	}
 
-	public String getWeiboAuthent() {
+	public Boolean isWeiboAuthent() {
 		return weiboAuthent;
 	}
 
-	public void setWeiboAuthent(String weiboAuthent) {
+	public void setWeiboAuthent(Boolean weiboAuthent) {
 		this.weiboAuthent = weiboAuthent;
 	}
+
 }

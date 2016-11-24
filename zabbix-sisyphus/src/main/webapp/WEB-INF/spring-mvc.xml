@@ -28,19 +28,27 @@
 			<bean
 				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 				<property name="prettyPrint" value="true" />
-			    <property name="objectMapper" ref="objectMapper" /> 
+				<property name="objectMapper" ref="objectMapper" />
 			</bean>
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
-	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">  
-	    <property name="timeZone">  
-	        <bean class="java.util.TimeZone" factory-method="getTimeZone" >  
-	            <constructor-arg value="GMT+08"/>  
-	        </bean>  
-	    </property>  
+	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
+		<property name="timeZone">
+			<bean class="java.util.TimeZone" factory-method="getTimeZone">
+				<constructor-arg value="GMT+08" />
+			</bean>
+		</property>
 	</bean>
-	
+
+	<mvc:interceptors>
+		<!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
+		<bean class="com.zabbix.sisyphus.base.web.HandlerInterceptorAdapter"  >
+		    <property name="requestLoggerService" ref="requestLoggerService"></property>
+		</bean>
+	</mvc:interceptors>
+
+
 	<!-- 定义JSP文件的位置 -->
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

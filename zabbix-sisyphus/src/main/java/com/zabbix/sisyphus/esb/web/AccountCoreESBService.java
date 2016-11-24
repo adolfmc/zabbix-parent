@@ -2,7 +2,9 @@ package com.zabbix.sisyphus.esb.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.zabbix.sisyphus.esb.vo.MockData;
 import com.zabbix.sisyphus.esb.vo.ResultV;
 
 /**
@@ -12,11 +14,13 @@ import com.zabbix.sisyphus.esb.vo.ResultV;
  * 
  */
 @Controller
-@RequestMapping("esb/account")
+@RequestMapping("esb/account/")
+@ResponseBody
 public class AccountCoreESBService {
+	
 	/** T_个人总账 */
-	public ResultV account(String customerId, String check, String accountId) {
-		ResultV result = ResultV.getInstance();
-		return result;
+	@RequestMapping("myAccount")
+	public ResultV myAccount(String customerId, String check) {
+		return MockData.account( customerId,  check);
 	}
 }

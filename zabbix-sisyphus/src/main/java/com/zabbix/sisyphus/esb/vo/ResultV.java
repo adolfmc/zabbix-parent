@@ -1,8 +1,8 @@
 package com.zabbix.sisyphus.esb.vo;
 
 public class ResultV {
-
-	private String code = "11111111";
+	private String customerId;
+	private String code = "00000000";
 	private String message="操作成功";
 	private Object info;
 
@@ -55,5 +55,13 @@ public class ResultV {
 
 	public void setInfo(Object info) {
 		this.info = info;
+	}
+
+	public String getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 }
