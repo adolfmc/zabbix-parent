@@ -1,6 +1,8 @@
 package com.zabbix.sisyphus.licaipro.entity;
 
 import javax.persistence.*;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -10,10 +12,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "t_licai_order_info")
-public class LicaiOrderInfo {
-
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+public class LicaiOrderInfo extends com.zabbix.sisyphus.base.entity.IdEntity implements Serializable {
     private String orderid; //订单号
     private Byte orderType; //订单类型
     private Byte payType; //支付方式:1=新浪支付

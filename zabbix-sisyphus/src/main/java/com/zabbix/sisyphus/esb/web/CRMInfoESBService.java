@@ -15,6 +15,14 @@ public class CRMInfoESBService {
 	/** C001_用户注册 */
 	@RequestMapping("register")
 	public ResultV register(String mobile, String loginPwd, Integer times) {
+		try {
+			System.out.println(Thread.currentThread().getId()+"|"+Thread.currentThread().getName()+">>>>>");
+			Thread.sleep(5000);
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return MockData.register(mobile, loginPwd, times);
 	}
 

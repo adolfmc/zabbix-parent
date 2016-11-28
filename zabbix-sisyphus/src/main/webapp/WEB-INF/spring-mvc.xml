@@ -41,11 +41,14 @@
 		</property>
 	</bean>
 
+	<!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
 	<mvc:interceptors>
-		<!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
+	<mvc:interceptor>
+		<mvc:mapping path="/esb/**"/>
 		<bean class="com.zabbix.sisyphus.base.web.HandlerInterceptorAdapter"  >
 		    <property name="requestLoggerService" ref="requestLoggerService"></property>
 		</bean>
+		</mvc:interceptor>
 	</mvc:interceptors>
 
 

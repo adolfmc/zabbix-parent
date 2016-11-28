@@ -11,6 +11,33 @@ public class RequestLogger extends com.zabbix.sisyphus.base.entity.IdEntity impl
 	private static final long serialVersionUID = -927645585917104374L;
 	private String request;
 	private Long times;
+	private Long time;
+	private String requestUri;
+	private String thread;
+
+	public String getThread() {
+		return thread;
+	}
+
+	public void setThread(String thread) {
+		this.thread = thread;
+	}
+
+	public String getRequestUri() {
+		return requestUri;
+	}
+
+	public void setRequestUri(String requestUri) {
+		this.requestUri = requestUri;
+	}
+
+	public Long getTime() {
+		return time;
+	}
+
+	public void setTime(Long time) {
+		this.time = time;
+	}
 
 	public String getRequest() {
 		return request;
