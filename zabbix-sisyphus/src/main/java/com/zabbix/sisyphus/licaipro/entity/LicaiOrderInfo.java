@@ -9,11 +9,11 @@ import java.util.Date;
 /**
  * 作者: zabbix 创建于 16/10/25.
  */
-
 @Entity
 @Table(name = "t_licai_order_info")
 public class LicaiOrderInfo extends com.zabbix.sisyphus.base.entity.IdEntity implements Serializable {
-    private String orderid; //订单号
+	private static final long serialVersionUID = 2957967108978764494L;
+	private String orderid; //订单号
     private Byte orderType; //订单类型
     private Byte payType; //支付方式:1=新浪支付
     private Date createTime; //创建时间

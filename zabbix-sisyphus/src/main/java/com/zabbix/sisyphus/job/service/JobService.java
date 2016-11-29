@@ -45,9 +45,9 @@ public class JobService {
 		Object[] args = { starttime, endtime, "%" + titile + "%", starttime };
 
 		return jdbcTemplate.query(sb.toString(), args, new ResultSetExtractor() {
-			public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
+			public List<JobInfo> extractData(ResultSet rs) throws SQLException, DataAccessException {
 				long s1 = System.currentTimeMillis();
-				List result = new ArrayList();
+				List<JobInfo> result = new ArrayList<JobInfo>();
 				while (rs.next()) {
 					JobInfo job = new JobInfo();
 					job.setCompany(rs.getObject("company") + "");

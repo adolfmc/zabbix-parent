@@ -40,10 +40,9 @@ public class JobController {
 		model.addAttribute("tasks", tasks);
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
-
 		model.addAllAttributes(searchParams);
 
-		return "job/jobList";
+		return "/job/jobList";
 	}
 
 	static {
