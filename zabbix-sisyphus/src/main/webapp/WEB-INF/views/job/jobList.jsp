@@ -5,66 +5,63 @@
 <html>
 <head>
 	<title>任务管理</title>
+
+<script type="text/javascript">  
+  
+$(document).ready(function () {   
+	QueryData();   
+}); 
+
+function QueryData(){  
+ 	var titile = $("#titile").val();  
+ 	var jobxz = $("#jobxz").combobox('getValue');
+ 	var starttime = $("#starttime").val();
+ 	var endtime = $("#endtime").val();  
+ 	$.ajax({
+	 	url: "/job/pages"
+	 	,data: jQuery.param({ "titile": titile,"jobxz":jobxz,"starttime":starttime,"endtime":endtime})
+		,success: function(data) {
+		    $("#dt").datagrid('loadData', data);
+		}
+	});  
+};  
+
+function formatOpt(val,row){
+	if(row.url!=null && row.rul!='' && row.rul!='defined'){
+		return '<a href='+row.url+' target="_blank">'+row.company+'</a>';
+	}else{
+		return 'row.company';
+	}
+}  
+</script>
+
 </head>
 
 <body>
-	<c:if test="${not empty message}">
-		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
-	</c:if>
-	<div class="row">
-		<div class="span offset">
-			<form class="form-search" action="#">
-				<label>职位：</label> <input type="text" name="titile" class="input-medium" value="${titile==null?"产品":(titile)}">
-				<label>开始时间：</label> <input type="text" name="starttime" class="input-medium" value="${starttime==null?"2016-09-15 10:00:00":(starttime)}" > 
-				<label>结束时间：</label> <input type="text" name="endtime" class="input-medium" value="${endtime==null?"2016-09-15 22:00:00":(endtime)}">  
-				<button type="submit" class="btn" id="search_btn">Search</button>
-		    </form>
-	    </div>
-	</div>
-	
-	<table id="contentTable" class="table table-striped table-bordered table-condensed">
-		<thead>
-		<tr>
-			<th width="30px">序号</th>
-			<th>公司</th>
-			<th>职位</th>
-			<th>类型</th
-			<th></th>
-			<th>薪水</th>
-			<th width="80px">时间</th>
-		</tr>
-		</thead>
-		<tbody>
-		<c:forEach items="${tasks}" var="task" begin="1" step="1" varStatus="status">
-			<tr>
-				<td><c:out value="${status.index}"/>
-				<td>
-				<c:choose>
-					<c:when test="${task.url=='null'}">
-						${task.company}
-					</c:when>
-					<c:otherwise>
-						<a href="${task.url=="null"?"https://www.liepin.com":(task.url)}" target="_blank">${task.company}</a>
-					</c:otherwise>
-				</c:choose>
-				</td>
-				
-				<td>
-				<c:choose>
-					<c:when test="${task.url=='null'}">
-					${task.titile}
-					</c:when>
-					<c:otherwise>
-						<a href="${task.url=="null"?"https://www.liepin.com":(task.url)}" target="_blank">${task.titile}</a>
-					</c:otherwise>
-				</c:choose>
-				</td>
-				<td>${task.jobxz}</a></td>
-				<td>${task.salary}</a></td>
-				<td>${task.memo}</a></td>
-			</tr>
-		</c:forEach>
-		</tbody>
-	</table>
+<div id="tb" style="padding:2px;height:auto">  
+   职位:<input id="titile" class="easyui-validatebox" style="width:200px" value="产品"/>   
+   性质:
+	<select id="jobxz" class="easyui-combobox" name="dept" style="width:50px;">
+		<option value=""></option>
+		<option value="企">企</option>
+		<option value="猎">猎</option>
+	</select>
+   开始:<input id="starttime" class="easyui-validatebox" style="width:130px" value="2016-12-01 07:00:00"/>
+   结束:<input id="endtime" class="easyui-validatebox" style="width:130px" value="2016-12-01 22:00:00" />
+   <a id="btnQuery" href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="QueryData()">查询</a>    
+</div>  
+
+ <table id="dt" class="easyui-datagrid"  data-options="title:'猎聘职位查询',rownumbers:true,toolbar:'#tb',fit:true,fitColumns:true,pagination:false,singleSelect:true">    
+    <thead>    
+        <tr>    
+            <th data-options="field:'id',hidden:true">编号</th>    
+            <th data-options="field:'titile'">职位</th>  
+            <th data-options="field:'company',formatter:formatOpt">公司</th>
+            <th data-options="field:'salary'">薪水</th>  
+            <th data-options="field:'jobxz'">性质</th>   
+        </tr>    
+    </thead>    
+</table>  
+
 </body>
 </html>

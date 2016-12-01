@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.modules.web.Servlets;
 
 import com.google.common.collect.Maps;
@@ -30,6 +31,13 @@ public class JobController {
 	@RequestMapping(method = { org.springframework.web.bind.annotation.RequestMethod.GET })
 	public String list(@RequestParam(value = "page", defaultValue = "1") int pageNumber, @RequestParam(value = "page.size", defaultValue = "50") int pageSize, @RequestParam(value = "sortType", defaultValue = "auto") String sortType, Model model, ServletRequest request,
 			JobInfo jobinfo) throws UnsupportedEncodingException {
+		return "/job/jobList";
+	}
+
+	@ResponseBody
+	@RequestMapping("pages")
+	public List<JobInfo> getPage(@RequestParam(value = "page", defaultValue = "1") int pageNumber, @RequestParam(value = "page.size", defaultValue = "50") int pageSize, @RequestParam(value = "sortType", defaultValue = "auto") String sortType, Model model, ServletRequest request,
+			JobInfo jobinfo) {
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Long userId = Long.valueOf(-4414312741959892991L);
 
@@ -37,12 +45,7 @@ public class JobController {
 		List<JobInfo> tasks = this.jobService.getJobs(userId, searchParams, pageNumber, pageSize, sortType, jobinfo);
 		System.out.println(System.currentTimeMillis() - s1);
 
-		model.addAttribute("tasks", tasks);
-		model.addAttribute("sortType", sortType);
-		model.addAttribute("sortTypes", sortTypes);
-		model.addAllAttributes(searchParams);
-
-		return "/job/jobList";
+		return tasks;
 	}
 
 	static {

@@ -22,14 +22,15 @@
 <!-- easyui-lang-zh_CN.js一定要放在jquery.easyui.min.js之后，不然不起作用 -->
 <script src="${ctx}/static/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js" type="text/javascript" ></script>
 <script src="${ctx}/static/My97DatePicker/WdatePicker.js"></script>
-	<link rel="stylesheet" href="/static/kindeditor/themes/default/default.css"/>
-	<script src="/static/kindeditor/kindeditor-min.js"></script>
-	<script src="/static/kindeditor/lang/zh_CN.js"></script>
-	<script type="text/javascript" src="/static/script/crm/upload.js"></script>
+<link rel="stylesheet" href="/static/kindeditor/themes/default/default.css"/>
+<script src="/static/kindeditor/kindeditor-min.js"></script>
+<script src="/static/kindeditor/lang/zh_CN.js"></script>
+<script type="text/javascript" src="/static/script/crm/upload.js"></script>
 <sitemesh:head/>
 </head>
 
 <body class="easyui-layout">
 	<sitemesh:body/>
 </body>
+
 </html>

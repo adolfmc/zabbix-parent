@@ -81,9 +81,4 @@ public class CreditInfoRestController extends BaseController {
 			model.addAttribute("creditInfo", creditInfoService.load(id));
 		}
 	}
-
-
-
-
-
 }

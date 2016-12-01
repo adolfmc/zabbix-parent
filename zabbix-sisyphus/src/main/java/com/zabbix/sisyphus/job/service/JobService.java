@@ -29,8 +29,8 @@ public class JobService {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<JobInfo> getJobs(Long userId, Map<String, Object> searchParams, int pageNumber, int pageSize, String sortType, JobInfo jobinfo) {
-		Object starttime = (jobinfo.getStarttime() == null) ? "2016-09-15 10:00:00" : jobinfo.getStarttime();
-		Object endtime = (jobinfo.getEndtime() == null) ? "2016-09-15 22:00:00" : jobinfo.getEndtime();
+		Object starttime = (jobinfo.getStarttime() == null) ? "2016-12-01 07:00:00" : jobinfo.getStarttime();
+		Object endtime = (jobinfo.getEndtime() == null) ? "2016-12-01 22:00:00" : jobinfo.getEndtime();
 		String titile = (jobinfo.getTitile() == null) ? "产品" : jobinfo.getTitile();
 		searchParams.put("starttime", starttime);
 		searchParams.put("endtime", endtime);
@@ -40,9 +40,10 @@ public class JobService {
 		sb.append("SELECT  distinct ji.company ,DATE_FORMAT( ji.create_date,'%Y-%c-%d') memo,ji.titile,ji.jobxz,ji.salary ,ji.url ");
 		sb.append("from   jobs.job_info ji ");
 		sb.append("WHERE  ji.CREATE_DATE >= ? AND ji.CREATE_DATE <= ? AND ji.titile like ? ");
+		sb.append("AND ji.jobxz =? ");
 		sb.append("AND ji.memo1 NOT IN (SELECT DISTINCT  i.memo1 FROM  jobs.job_info i WHERE i.CREATE_DATE <= ? ) ");
 
-		Object[] args = { starttime, endtime, "%" + titile + "%", starttime };
+		Object[] args = { starttime, endtime, "%" + titile + "%",jobinfo.getJobxz() ,starttime};
 
 		return jdbcTemplate.query(sb.toString(), args, new ResultSetExtractor() {
 			public List<JobInfo> extractData(ResultSet rs) throws SQLException, DataAccessException {
