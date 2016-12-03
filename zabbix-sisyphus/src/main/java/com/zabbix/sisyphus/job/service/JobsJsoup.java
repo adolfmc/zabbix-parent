@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -22,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.zabbix.sisyphus.job.entity.JobInfo;
 import com.zabbix.sisyphus.job.repository.JobInfoDao;
+import com.zabbix.sisyphus.proxy.PXUserAgent;
+import com.zabbix.sisyphus.proxy.service.ProxyIPService;
 import com.zabbix.sisyphus.util.ProxyIP;
 
 @Lazy(false)
@@ -33,6 +36,8 @@ public class JobsJsoup {
 
 	@Autowired
 	private JobInfoDao jobInfoDao;
+	@Autowired
+	private ProxyIPService proxyIPService;
 
 	public void collect(String url) throws Exception {
 		String[] ip = ProxyIP.getRandomProxyIP();
@@ -42,7 +47,7 @@ public class JobsJsoup {
 		doc = connection(url, doc, ip);
 		int ii = 0;
 		while (doc == null) {
-			ip = ProxyIP.getRandomProxyIP();
+			ip = proxyIPService.getIP();
 			doc = connection(url, doc, ip);
 			System.out.println(new Date() + "yichang  " + (ii++));
 		}
@@ -92,15 +97,22 @@ public class JobsJsoup {
 	private Document connection(String url, Document doc, String[] ip) {
 		try {
 			System.out.println(url + "  " + ip[0]);
-			doc = Jsoup.connect(url).proxy(Proxy.Type.HTTP, ip[0], Integer.valueOf(ip[1]).intValue()).userAgent("Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)").cookie("sd65fjl", "token=sfs;;7vvv").timeout(12000).post();
+			String uuid =UUID.randomUUID().toString().replaceAll(" ","");
+			String tokenuuid =UUID.randomUUID().toString().replaceAll(" ","");
+			doc = Jsoup.connect(url)
+					.proxy(Proxy.Type.HTTP, ip[0], Integer.valueOf(ip[1]).intValue())
+					.userAgent(PXUserAgent.getUserAgent())
+					.cookie(uuid, "token="+System.currentTimeMillis()+tokenuuid)
+					.timeout(12000)
+					.post();
 		} catch (Exception e) {
 			doc = null;
 		}
 		return doc;
 	}
 
-	//@Scheduled(cron = "0 0/30 * * * ? ")
 	@Scheduled(cron = "0 0/30 * * * ? ")
+//	 @Scheduled(cron = "0 0/5 * * * ? ")
 	public void execute() throws Exception {
 		System.out.println(new Date() + "--------------------------------------------");
 		try {
@@ -123,12 +135,13 @@ public class JobsJsoup {
 			String string = (String) localIterator1.next();
 			collect(string);
 
-//			Set<String> infos = vmap.keySet();
-//			Iterator<?> info = infos.iterator();
-//			while (info.hasNext()) {
-//				String jobcomp = (String) info.next();
-//				int i = Integer.valueOf(((Object[]) vmap.get(jobcomp))[0].toString()).intValue();
-//			}
+			// Set<String> infos = vmap.keySet();
+			// Iterator<?> info = infos.iterator();
+			// while (info.hasNext()) {
+			// String jobcomp = (String) info.next();
+			// int i = Integer.valueOf(((Object[])
+			// vmap.get(jobcomp))[0].toString()).intValue();
+			// }
 
 			Set<String> infos2 = vmap.keySet();
 			Iterator<?> info2 = infos2.iterator();
@@ -139,17 +152,20 @@ public class JobsJsoup {
 				String jobinfo = (String) is[1];
 				JobInfo jobii = new JobInfo();
 				jobii.setCompany(companyinfo.split(" ")[0]);
-				jobii.setJobxz(is[4]+"");
-				jobii.setUrl(is[5]+"");
+				jobii.setJobxz(is[4] + "");
+				jobii.setUrl(is[5] + "");
 				jobii.setTitile(jobinfo.split(" ")[0]);
 				jobii.setSalary(jobinfo.split(" ")[1]);
 				jobii.setType("liepin");
 				jobii.setJobtime(jobinfo.split(" ")[5]);
-				jobii.setJobinfo(is[6]+"");
-				jobii.setCompanyinfo(is[7]+"");
-				jobii.setIsNew(is[8]+"");
-				jobii.setMemo1(jobii.getCompanyinfo() + jobii.getTitile() + jobii.getSalary());
-				this.jobInfoDao.save(jobii);
+				jobii.setJobinfo(is[6] + "");
+				jobii.setCompanyinfo(is[7] + "");
+				jobii.setIsNew(is[8] + "");
+				jobii.setMemo1(jobii.getCompanyinfo() + jobii.getTitile() + jobii.getSalary() + jobii.getUrl());
+				
+				if(jobInfoDao.findByUrl(jobii.getUrl()).isEmpty() ){
+					jobInfoDao.save(jobii);
+				}
 			}
 
 			vmap = new HashMap<String, Object[]>();

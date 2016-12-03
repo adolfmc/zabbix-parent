@@ -40,10 +40,10 @@ public class JobService {
 		sb.append("SELECT  distinct ji.company ,DATE_FORMAT( ji.create_date,'%Y-%c-%d') memo,ji.titile,ji.jobxz,ji.salary ,ji.url ");
 		sb.append("from   jobs.job_info ji ");
 		sb.append("WHERE  ji.CREATE_DATE >= ? AND ji.CREATE_DATE <= ? AND ji.titile like ? ");
-		sb.append("AND ji.jobxz =? ");
+		sb.append("AND ji.jobxz like ? ");
 		sb.append("AND ji.memo1 NOT IN (SELECT DISTINCT  i.memo1 FROM  jobs.job_info i WHERE i.CREATE_DATE <= ? ) ");
 
-		Object[] args = { starttime, endtime, "%" + titile + "%",jobinfo.getJobxz() ,starttime};
+		Object[] args = { starttime, endtime, "%" + titile + "%","%" + jobinfo.getJobxz() + "%" ,starttime};
 
 		return jdbcTemplate.query(sb.toString(), args, new ResultSetExtractor() {
 			public List<JobInfo> extractData(ResultSet rs) throws SQLException, DataAccessException {
