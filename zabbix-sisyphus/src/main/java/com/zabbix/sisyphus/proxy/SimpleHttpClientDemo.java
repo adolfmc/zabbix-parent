@@ -8,14 +8,18 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+
+import com.zabbix.sisyphus.proxy.entity.ProxyIP;
 
 /**
  * 简单httpclient实例
@@ -44,8 +48,15 @@ public class SimpleHttpClientDemo {
 
 		// 创建httpclient对象
 		CloseableHttpClient client = HttpClients.createDefault();
+
+		// 依次是代理地址，代理端口号，协议类型
+		ProxyIP ip = IP.getProxyIP();
+		HttpHost proxy = new HttpHost(ip.getIp(), ip.getPort(), "https");
+		RequestConfig config = RequestConfig.custom().setProxy(proxy).build();
+
 		// 创建post方式请求对象
 		HttpGet httpPost = new HttpGet(url);
+		httpPost.setConfig(config);
 
 		// 装填参数
 		List<NameValuePair> nvps = new ArrayList<NameValuePair>();
@@ -55,24 +66,26 @@ public class SimpleHttpClientDemo {
 			}
 		}
 		// 设置参数到请求对象中
-		//httpPost.setEntity(new UrlEncodedFormEntity(nvps, encoding));
+		// httpPost.setEntity(new UrlEncodedFormEntity(nvps, encoding));
 
 		System.out.println("请求地址：" + url);
 		System.out.println("请求参数：" + nvps.toString());
 
 		// 设置header信息
 		// 指定报文头【Content-type】、【User-Agent】
-		httpPost.setHeader("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-		httpPost.setHeader("Accept-Encoding","gzip, deflate, sdch");
-		httpPost.setHeader("Accept-Language","zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4");
-		httpPost.setHeader("Cache-Control","max-age=0");
-		httpPost.setHeader("Upgrade-Insecure-Requests","1");
-		httpPost.setHeader("Host","www.xicidaili.com");
-		httpPost.setHeader("Connection","keep-alive");
-		httpPost.setHeader("Referer","http://www.xicidaili.com/");
-		httpPost.setHeader("User-Agent",PXUserAgent.getUserAgent());
-		httpPost.setHeader("Cookie","_free_proxy_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFVEkiJWYwNzc3NTMzYmE0MGM2NGJmZjI4M2M0MGVkOGQyZWE1BjsAVEkiEF9jc3JmX3Rva2VuBjsARkkiMXRCT1k4akhncFdIOWV1YlRiTHZBbG8xUEE4NjExWDRuNHltQ3A1Q2xucDg9BjsARg%3D%3D--78b7cae27be1c2d5ec650cbe6eaa02b29012cc2d; CNZZDATA1256960793=1771440537-1480581802-http%253A%252F%252Fwww.cnblogs.com%252F%7C1480686120");
-		
+		httpPost.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+		httpPost.setHeader("Accept-Encoding", "gzip, deflate, sdch");
+		httpPost.setHeader("Accept-Language", "zh-CN,zh;q=0.8,en;q=0.6,zh-TW;q=0.4");
+		httpPost.setHeader("Cache-Control", "max-age=0");
+		httpPost.setHeader("Upgrade-Insecure-Requests", "1");
+		httpPost.setHeader("Host", "www.xicidaili.com");
+		httpPost.setHeader("Connection", "keep-alive");
+		httpPost.setHeader("Referer", "http://www.xicidaili.com/");
+		httpPost.setHeader("User-Agent", PXUserAgent.getUserAgent());
+		httpPost.setHeader(
+				"Cookie",
+				"_free_proxy_session=BAh7B0kiD3Nlc3Npb25faWQGOgZFVEkiJWYwNzc3NTMzYmE0MGM2NGJmZjI4M2M0MGVkOGQyZWE1BjsAVEkiEF9jc3JmX3Rva2VuBjsARkkiMXRCT1k4akhncFdIOWV1YlRiTHZBbG8xUEE4NjExWDRuNHltQ3A1Q2xucDg9BjsARg%3D%3D--78b7cae27be1c2d5ec650cbe6eaa02b29012cc2d; CNZZDATA1256960793=1771440537-1480581802-http%253A%252F%252Fwww.cnblogs.com%252F%7C1480686120");
+
 		// 执行请求操作，并拿到结果（同步阻塞）
 		CloseableHttpResponse response = client.execute(httpPost);
 		// 获取结果实体
@@ -81,9 +94,9 @@ public class SimpleHttpClientDemo {
 			// 按指定编码转换结果实体为String类型
 			body = EntityUtils.toString(entity, encoding);
 		}
-		
-		System.out.println("========================================="+response.getStatusLine().getStatusCode());
-		
+
+		System.out.println("=========================================" + response.getStatusLine().getStatusCode());
+
 		EntityUtils.consume(entity);
 		// 释放链接
 		response.close();
@@ -109,10 +122,14 @@ public class SimpleHttpClientDemo {
 		System.out.println("交易响应结果：");
 		System.out.println(body);
 	}
-	
+
 	public static void main(String[] args) throws ParseException, IOException {
-		String url = "http://www.xicidaili.com/nn";
+		String url = "http://php.weather.sina.com.cn/iframe/index/w_cl.php";
 		Map<String, String> map = new HashMap<String, String>();
+		map.put("code", "js");
+		map.put("day", "0");
+		map.put("city", "上海");
+		map.put("dfc", "1");
 		map.put("charset", "utf-8");
 		String body = send(url, map, "utf-8");
 		System.out.println("交易响应结果：");

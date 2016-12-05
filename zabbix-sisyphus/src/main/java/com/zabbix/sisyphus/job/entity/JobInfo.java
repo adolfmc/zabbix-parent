@@ -28,6 +28,37 @@ public class JobInfo extends com.zabbix.sisyphus.base.entity.IdEntity implements
 	private String starttime;
 	private String endtime;
 	private String industry;
+	private String area;
+	private String edu;
+	private String workYears;
+	
+	public String getWorkYears() {
+		return workYears;
+	}
+
+	public void setWorkYears(String workYears) {
+		this.workYears = workYears;
+	}
+
+	public String getEdu() {
+		return edu;
+	}
+
+	public void setEdu(String edu) {
+		this.edu = edu;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	public String getIndustry() {
 		return industry;
@@ -54,7 +85,6 @@ public class JobInfo extends com.zabbix.sisyphus.base.entity.IdEntity implements
 	public void setEndtime(String endtime) {
 		this.endtime = endtime;
 	}
-
 
 	@Column(length = 1000)
 	public String getJobinfo() {
@@ -113,7 +143,6 @@ public class JobInfo extends com.zabbix.sisyphus.base.entity.IdEntity implements
 	public void setJobtime(String jobtime) {
 		this.jobtime = jobtime;
 	}
-
 
 	public String getJobxz() {
 		return this.jobxz;

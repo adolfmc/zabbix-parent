@@ -111,7 +111,7 @@ public class JobsJsoup {
 		return doc;
 	}
 
-	@Scheduled(cron = "0 0/30 * * * ? ")
+	@Scheduled(cron = "0 0 0/1 * * ? ")
 //	 @Scheduled(cron = "0 0/5 * * * ? ")
 	public void execute() throws Exception {
 		System.out.println(new Date() + "--------------------------------------------");
@@ -119,7 +119,7 @@ public class JobsJsoup {
 			List<String> urllist = new ArrayList<String>();
 
 			urllist.add("https://www.liepin.com/sh/zhaopin/?sfrom=click-pc_homepage-centre_searchbox-search_new&key=");
-			for (int i = 1; i <= 500; ++i) {
+			for (int i = 1; i <= 200; ++i) {
 				urllist.add("https://www.liepin.com/sh/zhaopin/?sfrom=click-pc_homepage-centre_searchbox-search_new&key=&curPage=" + i);
 			}
 
@@ -134,14 +134,6 @@ public class JobsJsoup {
 		for (Iterator<String> localIterator1 = urllist.iterator(); localIterator1.hasNext();) {
 			String string = (String) localIterator1.next();
 			collect(string);
-
-			// Set<String> infos = vmap.keySet();
-			// Iterator<?> info = infos.iterator();
-			// while (info.hasNext()) {
-			// String jobcomp = (String) info.next();
-			// int i = Integer.valueOf(((Object[])
-			// vmap.get(jobcomp))[0].toString()).intValue();
-			// }
 
 			Set<String> infos2 = vmap.keySet();
 			Iterator<?> info2 = infos2.iterator();
@@ -162,7 +154,9 @@ public class JobsJsoup {
 				jobii.setCompanyinfo(is[7] + "");
 				jobii.setIsNew(is[8] + "");
 				jobii.setIndustry(companyinfo.split(" ")[1]);
-				jobii.setMemo1(jobii.getCompanyinfo() + jobii.getTitile() + jobii.getSalary() + jobii.getUrl());
+				jobii.setArea(jobinfo.split(" ")[2]);
+				jobii.setEdu(jobinfo.split(" ")[3]);
+				jobii.setWorkYears(jobinfo.split(" ")[4]);
 				
 				if(jobInfoDao.findByUrl(jobii.getUrl()).isEmpty() ){
 					jobInfoDao.save(jobii);
@@ -171,7 +165,7 @@ public class JobsJsoup {
 
 			vmap = new HashMap<String, Object[]>();
 
-			Thread.sleep(2000L);
+			Thread.sleep(20000L);
 		}
 	}
 }
