@@ -27,6 +27,15 @@ public class JobInfo extends com.zabbix.sisyphus.base.entity.IdEntity implements
 	private String memo2;
 	private String starttime;
 	private String endtime;
+	private String industry;
+
+	public String getIndustry() {
+		return industry;
+	}
+
+	public void setIndustry(String industry) {
+		this.industry = industry;
+	}
 
 	@Transient
 	public String getStarttime() {

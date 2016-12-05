@@ -161,6 +161,7 @@ public class JobsJsoup {
 				jobii.setJobinfo(is[6] + "");
 				jobii.setCompanyinfo(is[7] + "");
 				jobii.setIsNew(is[8] + "");
+				jobii.setIndustry(companyinfo.split(" ")[1]);
 				jobii.setMemo1(jobii.getCompanyinfo() + jobii.getTitile() + jobii.getSalary() + jobii.getUrl());
 				
 				if(jobInfoDao.findByUrl(jobii.getUrl()).isEmpty() ){
