@@ -58,7 +58,8 @@ function formatOpt(val,row){
             <th data-options="field:'titile'">职位</th>  
             <th data-options="field:'company',formatter:formatOpt">公司</th>
             <th data-options="field:'salary'">薪水</th>  
-            <th data-options="field:'jobxz'">性质</th>   
+            <th data-options="field:'jobxz'">性质</th>
+            <th data-options="field:'memo'">日期</th>    
         </tr>    
     </thead>    
 </table>  
