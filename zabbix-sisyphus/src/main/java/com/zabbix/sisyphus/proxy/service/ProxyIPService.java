@@ -2,7 +2,6 @@ package com.zabbix.sisyphus.proxy.service;
 
 import java.net.Proxy;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -13,6 +12,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -29,6 +30,7 @@ public class ProxyIPService {
 	public static Vector<String[]> ipList = new Vector<String[]>();
 	public static Vector<String> urlList = new Vector<String>();
 	public static String checkUrl ="http://www.baidu.com";
+	public static Logger logger =LoggerFactory.getLogger(ProxyIPService.class);
 	
 	static{
 		urlList.add("http://www.xicidaili.com/nn");
@@ -91,7 +93,7 @@ public class ProxyIPService {
 	public synchronized  Document connection(String url, String[] ip) {
 		Document doc;
 		try {
-			System.out.println(url + "  " + ip[0]);
+			logger.debug(url + "  " + ip[0]);
 			String cookieId = UUID.randomUUID().toString().replaceAll("-", "");
 			String token = "token=" + UUID.randomUUID().toString().replaceAll("-", "") + System.nanoTime();
 			doc = Jsoup.connect(url).proxy(Proxy.Type.HTTP, ip[0], Integer.valueOf(ip[1]))
@@ -151,10 +153,10 @@ public class ProxyIPService {
 			}
 
 			if (result == null) {
-				System.out.println(new Date() + "  " + "ip " + ip[0] + " is not aviable");// 异常IP
+				logger.debug("  " + "ip " + ip[0] + " is not aviable");
 			} else {
-				System.out.println(result.text());
-				System.out.println(new Date() + "  " + ip[0] + ":" + ip[1] + " is ok");
+				logger.debug(result.text());
+				logger.debug("  " + ip[0] + ":" + ip[1] + " is ok");
 				checkedProxyIps.add(proxyIP);
 				
 				List<ProxyIP> ips = proxyIPDao.findByIp(proxyIP.getIp());

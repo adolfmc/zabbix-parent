@@ -46,7 +46,6 @@ public class JobService {
 
 		return jdbcTemplate.query(sb.toString(), args, new ResultSetExtractor() {
 			public List<JobInfo> extractData(ResultSet rs) throws SQLException, DataAccessException {
-				long s1 = System.currentTimeMillis();
 				List<JobInfo> result = new ArrayList<JobInfo>();
 				while (rs.next()) {
 					JobInfo job = new JobInfo();
@@ -58,7 +57,6 @@ public class JobService {
 					job.setUrl(rs.getObject("url") + "");
 					result.add(job);
 				}
-				System.out.println(">>" + (System.currentTimeMillis() - s1));
 				return result;
 			}
 		});

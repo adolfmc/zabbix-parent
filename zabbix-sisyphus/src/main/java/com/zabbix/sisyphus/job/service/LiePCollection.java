@@ -2,7 +2,6 @@ package com.zabbix.sisyphus.job.service;
 
 import java.net.Proxy;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,12 +13,17 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+
+
 
 import com.zabbix.sisyphus.job.entity.JobInfo;
 import com.zabbix.sisyphus.job.repository.JobInfoDao;
@@ -30,7 +34,8 @@ import com.zabbix.sisyphus.util.ProxyIP;
 @Lazy(false)
 @Async
 @Component
-public class JobsJsoup {
+public class LiePCollection {
+	public static Logger logger = LoggerFactory.getLogger(LiePCollection.class);
 	public static Map<String, Object[]> vmap = new HashMap<String, Object[]>();
 	public static Map<Object, Object> ipinfos = new HashMap<Object, Object>();
 
@@ -49,14 +54,14 @@ public class JobsJsoup {
 		while (doc == null) {
 			ip = proxyIPService.getIP();
 			doc = connection(url, doc, ip);
-			System.out.println(new Date() + "yichang  " + (ii++));
+			logger.debug("yichang  " + (ii++));
 		}
 
 		Elements elements = doc.getElementsByClass("sojob-list");
 		Iterator<?> localIterator1 = elements.iterator();
 		while (localIterator1.hasNext()) {
 			Element element = (Element) localIterator1.next();
-			System.out.println(element);
+			logger.debug(element.html());
 			Elements eleLi = element.getElementsByTag("li");
 
 			for (Iterator<?> localIterator2 = eleLi.iterator(); localIterator2.hasNext();) {
@@ -82,7 +87,7 @@ public class JobsJsoup {
 				for (int i = 0; i < companyi.length; ++i) {
 					int times = 0;
 					String infokey = jobi[0] + " " + jobi[1] + " " + jobi[2] + " " + jobi[3] + " " + jobi[4] + "|" + companyinfo;
-					System.out.println("vmap.size() = " + vmap.size());
+					logger.debug("vmap.size() = " + vmap.size());
 					if (vmap.containsKey(infokey)) {
 						times = Integer.valueOf(((Object[]) vmap.get(infokey))[0].toString()).intValue() + 1;
 						vmap.put(infokey, new Object[] { Integer.valueOf(times), jobinfo, companyinfo, jobi[5], qiyxz, zwurl, jobinfo, companyinfo, Boolean.valueOf(false) });
@@ -96,7 +101,7 @@ public class JobsJsoup {
 
 	private Document connection(String url, Document doc, String[] ip) {
 		try {
-			System.out.println(url + "  " + ip[0]);
+			logger.debug(url + "  " + ip[0]);
 			String uuid =UUID.randomUUID().toString().replaceAll(" ","");
 			String tokenuuid =UUID.randomUUID().toString().replaceAll(" ","");
 			doc = Jsoup.connect(url)
@@ -106,26 +111,27 @@ public class JobsJsoup {
 					.timeout(12000)
 					.post();
 		} catch (Exception e) {
+			logger.warn(String.format("msg  = [%s] , ip = [%s] ",e.getMessage(),ip[0]) );
 			doc = null;
 		}
 		return doc;
 	}
 
-	@Scheduled(cron = "0 0 0/1 * * ? ")
+	 @Scheduled(cron = "0 0/30 * * * ? ")
 //	 @Scheduled(cron = "0 0/5 * * * ? ")
 	public void execute() throws Exception {
-		System.out.println(new Date() + "--------------------------------------------");
+		logger.debug("--------------------------------------------");
 		try {
 			List<String> urllist = new ArrayList<String>();
 
 			urllist.add("https://www.liepin.com/sh/zhaopin/?sfrom=click-pc_homepage-centre_searchbox-search_new&key=");
-			for (int i = 1; i <= 200; ++i) {
+			for (int i = 1; i <= 500; ++i) {
 				urllist.add("https://www.liepin.com/sh/zhaopin/?sfrom=click-pc_homepage-centre_searchbox-search_new&key=&curPage=" + i);
 			}
 
 			saveInfo(urllist);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(e.getMessage());
 		}
 	}
 
@@ -145,7 +151,7 @@ public class JobsJsoup {
 				JobInfo jobii = new JobInfo();
 				jobii.setCompany(companyinfo.split(" ")[0]);
 				jobii.setJobxz(is[4] + "");
-				jobii.setUrl(is[5] + "");
+				jobii.setUrl((is[5] + "").trim());
 				jobii.setTitile(jobinfo.split(" ")[0]);
 				jobii.setSalary(jobinfo.split(" ")[1]);
 				jobii.setType("liepin");

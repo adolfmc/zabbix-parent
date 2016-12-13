@@ -19,6 +19,8 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
@@ -46,13 +48,13 @@ import com.zabbix.sisyphus.proxy.service.ProxyIPService;
 @Async
 @Component
 public class LaGouCollection extends JsoupBase{
-
+	public static Logger logger = LoggerFactory.getLogger(LaGouCollection.class);
 	/**
 	 * 忽视证书HostName
 	 */
 	private static HostnameVerifier ignoreHostnameVerifier = new HostnameVerifier() {
 		public boolean verify(String s, SSLSession sslsession) {
-			System.out.println("WARNING: Hostname is not matched for cert.");
+			logger.debug("WARNING: Hostname is not matched for cert.");
 			return true;
 		}
 	};
@@ -68,7 +70,7 @@ public class LaGouCollection extends JsoupBase{
 		public void checkClientTrusted(X509Certificate certificates[], String authType) throws CertificateException {
 			if (this.certificates == null) {
 				this.certificates = certificates;
-				System.out.println("init at checkClientTrusted");
+				logger.debug("init at checkClientTrusted");
 			}
 
 		}
@@ -77,7 +79,7 @@ public class LaGouCollection extends JsoupBase{
 		public void checkServerTrusted(X509Certificate[] ax509certificate, String s) throws CertificateException {
 			if (this.certificates == null) {
 				this.certificates = ax509certificate;
-				System.out.println("init at checkServerTrusted");
+				logger.debug("init at checkServerTrusted");
 			}
 
 			// for (int c = 0; c < certificates.length; c++) {
@@ -139,7 +141,7 @@ public class LaGouCollection extends JsoupBase{
 			} while (length > 0);
 
 			// result.setResponseData(bytes);
-			System.out.println(buffer.toString());
+			logger.debug(buffer.toString());
 			reader.close();
 
 			connection.disconnect();
@@ -155,7 +157,7 @@ public class LaGouCollection extends JsoupBase{
 	@Autowired
 	private ProxyIPService proxyIPService;
 	
-	@Scheduled(cron = "0 0/5 * * * ? ")
+	@Scheduled(cron = "0 0 0/1 * * ? ")
 	public void excute() {
 		for (int i = 0; i <= 100; i++) {
 			String urlString = "https://www.lagou.com/jobs/positionAjax.json?px=new&needAddtionalResult=false&first=false&pn=" + i;
@@ -168,7 +170,7 @@ public class LaGouCollection extends JsoupBase{
 					is = false;
 				} catch (Exception e) {
 					is = true;
-					e.printStackTrace();
+					logger.warn(e.getMessage());
 				}
 			}
 		}
@@ -207,10 +209,12 @@ public class LaGouCollection extends JsoupBase{
 				entity.setUrl("https://www.lagou.com/jobs/"+positionId+".html");
 				entity.setIndustry(industryField);
 				entity.setType("lagou");
-				jobInfoDao.save(entity);
+				if(jobInfoDao.findByUrl(entity.getUrl()).isEmpty() ){
+					jobInfoDao.save(entity);
+				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.warn(e.getMessage());
 		}
 	}
 
