@@ -108,7 +108,7 @@ public class ProxyIPService {
 					.timeout(15000).get();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.debug(e.getMessage());
 			doc = null;
 		}
 
