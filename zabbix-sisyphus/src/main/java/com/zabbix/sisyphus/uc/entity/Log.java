@@ -2,6 +2,7 @@ package com.zabbix.sisyphus.uc.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -59,7 +60,8 @@ public class Log extends IdEntity {
 	public void setOperatorId(String operatorId) {
 		this.operatorId = operatorId;
 	}
-    
+	
+	@Column(length=1000)
 	public String getOperatorDesc() {
 		/*if(operatorDesc != null && operatorDesc.length() > 100){
 			return operatorDesc.substring(0, 100)+"......";

@@ -60,7 +60,7 @@ public class PasswordEncoder {
     @SuppressWarnings("static-access")
 	public static void main(String[] args) {
     	PasswordEncoder p = new PasswordEncoder();
-    	System.out.println(p.encoder("admin"));
+    	System.out.println(p.encoder("111111"));
 	}
     
 }

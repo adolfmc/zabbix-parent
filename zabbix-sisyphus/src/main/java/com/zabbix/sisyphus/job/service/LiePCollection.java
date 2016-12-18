@@ -22,9 +22,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-
-
-
 import com.zabbix.sisyphus.job.entity.JobInfo;
 import com.zabbix.sisyphus.job.repository.JobInfoDao;
 import com.zabbix.sisyphus.proxy.PXUserAgent;

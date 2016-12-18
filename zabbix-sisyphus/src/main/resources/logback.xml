@@ -17,12 +17,12 @@
 	</appender>
 
 	<!-- project default level -->
-	<logger name="com.zabbix.sisyphus" level="warn" />
+	<logger name="com.zabbix.sisyphus" level="info" />
 
 	<!--log4jdbc -->
-	<logger name="jdbc.sqltiming" level="warn"/>
+	<logger name="jdbc.sqltiming" level="info"/>
 
-	<root level="warn">
+	<root level="info">
 		<appender-ref ref="console" />
 		<appender-ref ref="rollingFile" />
 	</root>

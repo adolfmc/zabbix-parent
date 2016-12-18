@@ -95,22 +95,28 @@ public class IndexController {
 	 * 获取首页index的菜单menu
 	 * 
 	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping("/getMenu")
 	@ResponseBody
-	public MenuVo getMenu() {
-		Function function = commonInService.findRootFunction();
-		UserDetail user = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		List<Function> functions = commonInService.findStaff(user.getId()).getFunctions();
+	public MenuVo getMenu() throws Exception {
+		MenuVo menuVo = null;
+		try {
+			Function function = commonInService.findRootFunction();
+			UserDetail user = (UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			List<Function> functions = commonInService.findStaff(user.getId()).getFunctions();
 
-		Set<Long> ids = new HashSet<Long>();
-		ids.add(function.getId());
-		for (Function func : functions) {
-			ids.add(func.getId());
+			Set<Long> ids = new HashSet<Long>();
+			ids.add(function.getId());
+			for (Function func : functions) {
+				ids.add(func.getId());
+			}
+
+			menuVo = new MenuVo();
+			convert(function, menuVo, ids);
+		} catch (Exception e) {
+			throw new Exception("加载目录异常,"+e.getMessage()); 
 		}
-
-		MenuVo menuVo = new MenuVo();
-		convert(function, menuVo, ids);
 		return menuVo;
 	}
 	
